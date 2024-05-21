@@ -4,10 +4,9 @@ import com.prj2spring.domain.board.Board;
 import com.prj2spring.service.board.BoardService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/board")
@@ -17,7 +16,10 @@ public class BoardController {
     private final BoardService service;
 
     @PostMapping("add")
-    public ResponseEntity add(@RequestBody Board board) {
+    public ResponseEntity add(@RequestBody Board board) throws InterruptedException {
+
+        Thread.sleep(1000);
+
         if (service.validate(board)) {
             service.add(board);
             return ResponseEntity.ok().build();
@@ -25,4 +27,10 @@ public class BoardController {
             return ResponseEntity.badRequest().build();
         }
     }
+
+    @GetMapping("list")
+    public List<Board> list() {
+        return service.list();
+    }
+
 }
