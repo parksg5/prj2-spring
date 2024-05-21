@@ -6,7 +6,7 @@ import com.nimbusds.jose.jwk.RSAKey;
 import com.nimbusds.jose.jwk.source.ImmutableJWKSet;
 import com.nimbusds.jose.jwk.source.JWKSource;
 import com.nimbusds.jose.proc.SecurityContext;
-import lombok.Value;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.Customizer;
@@ -27,10 +27,10 @@ import java.security.interfaces.RSAPublicKey;
 public class AppConfiguration {
 
     @Value("${jwt.public.key}")
-    RSAPublicKey Key;
+    RSAPublicKey key;
 
     @Value("${jwt.private.key}")
-    RSAPrivateKey Priv;
+    RSAPrivateKey priv;
 
     @Bean
     public JwtDecoder jwtDecoder() {
@@ -39,8 +39,8 @@ public class AppConfiguration {
 
     @Bean
     public JwtEncoder jwtEncoder() {
-        JWK jwk = new RSAKey.Builder(this.Key)
-                .privateKey(this.Priv)
+        JWK jwk = new RSAKey.Builder(this.key)
+                .privateKey(this.priv)
                 .build();
         JWKSource<SecurityContext> jwks = new ImmutableJWKSet<>(new JWKSet(jwk));
         return new NimbusJwtEncoder(jwks);
