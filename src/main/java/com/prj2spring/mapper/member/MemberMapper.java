@@ -42,10 +42,11 @@ public interface MemberMapper {
     List<Member> selectAll();
 
     @Select("""
-            SELECT id,
-                   email,
-                   nick_name,
-                   inserted
+            SELECT  id,
+                    email,
+                    password,
+                    nick_name,
+                    inserted
             FROM member
             WHERE id = #{id}
             """)
