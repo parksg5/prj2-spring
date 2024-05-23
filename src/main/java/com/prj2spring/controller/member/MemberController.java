@@ -63,7 +63,7 @@ public class MemberController {
     @DeleteMapping("{id}")
     public ResponseEntity delete(@RequestBody Member member) {
         if (service.hasAccess(member)) {
-//            service.remove(member.getId());
+            service.remove(member.getId());
             return ResponseEntity.ok().build();
         }
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
