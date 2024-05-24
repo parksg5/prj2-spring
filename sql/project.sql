@@ -47,3 +47,14 @@ DESC board;
 SELECT *
 FROM board
 ORDER BY id DESC;
+
+SELECT *
+FROM member
+WHERE email = '11@11';
+
+DELETE
+FROM board
+WHERE member_id = 4;
+DELETE
+FROM member
+WHERE email = '11@11';
