@@ -14,6 +14,7 @@ SELECT *
 FROM board
 ORDER BY id DESC;
 
+
 # member table 만들기
 CREATE TABLE member
 (
@@ -50,11 +51,31 @@ ORDER BY id DESC;
 
 SELECT *
 FROM member
-WHERE email = '11@11';
+WHERE email = 'qq@qq';
 
 DELETE
 FROM board
-WHERE member_id = 4;
+WHERE member_id = 9;
 DELETE
 FROM member
-WHERE email = '11@11';
+WHERE email = 'qq@qq';
+
+# 권한 테이블
+CREATE TABLE authority
+(
+    member_id INT         NOT NULL REFERENCES member (id),
+    name      VARCHAR(20) NOT NULL,
+    PRIMARY KEY (member_id, name)
+);
+
+INSERT INTO authority (member_id, name)
+VALUES (19, 'admin');
+
+USE prj2;
+
+INSERT INTO board
+    (title, content, member_id)
+SELECT title, content, member_id
+FROM board;
+SELECT COUNT(*)
+FROM board;
