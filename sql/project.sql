@@ -131,3 +131,6 @@ CREATE TABLE board_like
 
 SELECT *
 FROM board_like;
+
+SELECT *
+FROM member;
