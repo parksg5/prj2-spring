@@ -140,4 +140,4 @@ FROM board b
          JOIN member m ON b.member_id = m.id
          LEFT JOIN board_file f ON b.id = f.board_id
          LEFT JOIN board_like l ON b.id = l.board_id
-WHERE b.id = 1;
+WHERE b.id = 3;
