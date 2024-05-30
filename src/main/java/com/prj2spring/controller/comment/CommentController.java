@@ -34,4 +34,9 @@ public class CommentController {
 
         return service.list(boardId);
     }
+
+    @DeleteMapping("remove")
+    public void remove(@RequestBody Comment comment) {
+        service.remove(comment);
+    }
 }
