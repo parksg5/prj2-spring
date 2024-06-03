@@ -73,6 +73,7 @@ VALUES (19, 'admin');
 
 USE prj2;
 
+# 게시물 여러개 입력
 INSERT INTO board
     (title, content, member_id)
 SELECT title, content, member_id
@@ -83,16 +84,16 @@ SELECT *
 FROM member;
 UPDATE member
 SET nick_name = 'abcd'
-WHERE id = 15;
+WHERE id = 18;
 UPDATE member
 SET nick_name = 'efgh'
-WHERE id = 16;
+WHERE id = 19;
 
 UPDATE board
-SET member_id = 15
+SET member_id = 18
 WHERE id % 2 = 0;
 UPDATE board
-SET member_id = 16
+SET member_id = 19
 WHERE id % 2 = 1;
 
 UPDATE board
@@ -119,7 +120,8 @@ CREATE TABLE board_file
 );
 
 SELECT *
-FROM board_file;
+FROM board_file
+WHERE board_id = 878;
 
 # board_like 만들기
 CREATE TABLE board_like
@@ -132,16 +134,13 @@ CREATE TABLE board_like
 SELECT *
 FROM board_like;
 
-SELECT *
-FROM member;
-
 SELECT b.id, COUNT(DISTINCT f.name), COUNT(DISTINCT l.member_id)
 FROM board b
          JOIN member m ON b.member_id = m.id
          LEFT JOIN board_file f ON b.id = f.board_id
          LEFT JOIN board_like l ON b.id = l.board_id
-WHERE b.id = 3;
-
+WHERE b.id = 5;
+DESC board;
 # 댓글 테이블
 CREATE TABLE comment
 (
@@ -152,5 +151,12 @@ CREATE TABLE comment
     inserted  DATETIME     NOT NULL DEFAULT NOW()
 );
 SELECT *
-FROM comment
-WhERE board_id = 3;
+FROM comment;
+
+DESC board;
+INSERT INTO board
+    (title, content, member_id)
+SELECT title, content, member_id
+FROM board;
+
+

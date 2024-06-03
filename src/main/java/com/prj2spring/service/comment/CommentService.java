@@ -13,6 +13,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @Transactional(rollbackFor = Exception.class)
 public class CommentService {
+
     final CommentMapper mapper;
 
     public void add(Comment comment, Authentication authentication) {
@@ -29,16 +30,35 @@ public class CommentService {
         if (comment == null) {
             return false;
         }
+
         if (comment.getComment().isBlank()) {
             return false;
         }
+
         if (comment.getBoardId() == null) {
             return false;
         }
+
         return true;
     }
 
     public void remove(Comment comment) {
         mapper.deleteById(comment.getId());
+    }
+
+    public boolean hasAccess(Comment comment, Authentication authentication) {
+        Comment db = mapper.selectById(comment.getId());
+        if (db == null) {
+            return false;
+        }
+
+        if (!authentication.getName().equals(db.getMemberId().toString())) {
+            return false;
+        }
+        return true;
+    }
+
+    public void update(Comment comment) {
+        mapper.update(comment);
     }
 }

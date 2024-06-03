@@ -3,6 +3,7 @@ package com.prj2spring.service.board;
 import com.prj2spring.domain.board.Board;
 import com.prj2spring.domain.board.BoardFile;
 import com.prj2spring.mapper.board.BoardMapper;
+import com.prj2spring.mapper.comment.CommentMapper;
 import com.prj2spring.mapper.member.MemberMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -28,12 +29,13 @@ public class BoardService {
     private final BoardMapper mapper;
     private final MemberMapper memberMapper;
     final S3Client s3Client;
+    private final CommentMapper commentMapper;
 
     @Value("${aws.s3.bucket.name}")
     String bucketName;
 
     @Value("${image.src.prefix}")
-    String SrcPrefix;
+    String srcPrefix;
 
     public void add(Board board, MultipartFile[] files, Authentication authentication) throws IOException {
         board.setMemberId(Integer.valueOf(authentication.getName()));
@@ -110,7 +112,7 @@ public class BoardService {
         List<String> fileNames = mapper.selectFileNameByBoardId(id);
         // 버킷객체URL/{id}/{name}
         List<BoardFile> files = fileNames.stream()
-                .map(name -> new BoardFile(name, STR."\{SrcPrefix}\{id}/\{name}"))
+                .map(name -> new BoardFile(name, STR."\{srcPrefix}\{id}/\{name}"))
                 .toList();
 
         board.setFileList(files);
@@ -150,6 +152,9 @@ public class BoardService {
         // board_like
         mapper.deleteLikeByBoardId(id);
 
+        // comment
+        commentMapper.deleteByBoardId(id);
+
         // board
         mapper.deleteById(id);
     }
@@ -187,6 +192,7 @@ public class BoardService {
                         .build();
 
                 s3Client.putObject(objectRequest, RequestBody.fromInputStream(file.getInputStream(), file.getSize()));
+
             }
         }
 
